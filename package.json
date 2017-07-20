@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "dependencies": {
+    "bufferutil": "^3.0.2",
+    "discord.js": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.14",
+    "app-module-path": "^2.2.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "run": "tsc && node dist/app.js"
+  }
+}
