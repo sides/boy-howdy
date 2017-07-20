@@ -18,11 +18,6 @@ class App {
      * Runs when the app has started boot.
      */
     booting() {
-        this.client.on('message', message => {
-            if (message.content === 'go completely bananas') {
-                message.reply('i am confident that sides will finish mw');
-            }
-        });
     }
     /**
      * Runs when the app has successfully logged into the client.

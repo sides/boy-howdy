@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require('app-module-path').addPath(__dirname);
-const App_1 = require("lib/App");
+const BotApp_1 = require("bot/BotApp");
 const config = require('../config.json');
-const app = new App_1.default(config);
+const app = new BotApp_1.default(config);
 app.boot();
 exports.default = app;
