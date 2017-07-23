@@ -1,7 +1,7 @@
 {
-    "auth": {
-      "discord": {
-        "token": "YOUR TOKEN HERE"
-      }
+  "auth": {
+    "discord": {
+      "token": "your bot token here"
     }
+  }
 }
