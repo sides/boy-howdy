@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const App_1 = require("lib/App");
 const Magic8ballListener_1 = require("bot/listeners/Magic8ballListener");
+const SearchListener_1 = require("bot/listeners/SearchListener");
 class BotApp extends App_1.default {
     booting() {
         super.booting();
@@ -16,6 +17,8 @@ class BotApp extends App_1.default {
         });
         const magic8ball = new Magic8ballListener_1.default();
         magic8ball.subscribe(this.client);
+        const search = new SearchListener_1.default();
+        search.subscribe(this.client);
     }
     booted() {
         if (this.config.debug) {

@@ -16,7 +16,7 @@ class Magic8ballResponse {
             setTimeout(() => {
                 const response = randomMagic8ballResponse_1.default().toLowerCase();
                 message.edit(`${emojis[2]} ${emojis[1]} ${response}`);
-            }, Math.random() * 3000 + 4000);
+            }, Math.random() * 1500 + 3500);
         });
     }
 }
