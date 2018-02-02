@@ -95,8 +95,8 @@ export default class SearchListener extends MessageListener {
 
           if (!matches || !matches[1])
             resolve(null);
-
-          resolve(matches[1]);
+          else
+            resolve(matches[1]);
         });
       });
     });

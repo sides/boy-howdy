@@ -83,7 +83,8 @@ class SearchListener extends MessageListener_1.default {
                     const matches = rawBody.match(regex);
                     if (!matches || !matches[1])
                         resolve(null);
-                    resolve(matches[1]);
+                    else
+                        resolve(matches[1]);
                 });
             });
         });
