@@ -5,7 +5,7 @@ class MessageListener {
         client.on('message', this.onmessage.bind(this));
     }
     match(message) {
-        return true;
+        return message.channel.type === "text";
     }
     handle(message) {
     }

@@ -2,6 +2,7 @@ import App from 'lib/App'
 import IBotConfig from 'bot/IBotConfig'
 import Magic8ballListener from 'bot/listeners/Magic8ballListener'
 import SearchListener from 'bot/listeners/SearchListener'
+import BalloonListener from 'bot/listeners/BalloonListener'
 import { TextChannel } from 'discord.js'
 
 export default class BotApp extends App {
@@ -24,6 +25,9 @@ export default class BotApp extends App {
 
     const search = new SearchListener();
     search.subscribe(this.client);
+
+    const balloon = new BalloonListener();
+    balloon.subscribe(this.client);
   }
 
   booted() {

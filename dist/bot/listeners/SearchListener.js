@@ -4,7 +4,7 @@ const MessageListener_1 = require("lib/listeners/MessageListener");
 const https = require("https");
 class SearchListener extends MessageListener_1.default {
     match(message) {
-        return message.content.startsWith('🔍');
+        return super.match(message) && message.content.startsWith('🔍');
     }
     handle(message) {
         const matches = message.content.match(/^🔍\s*((suisides?|mw)?\s*(\d+)?\s*(\d+)?.*$)/);
@@ -79,10 +79,10 @@ class SearchListener extends MessageListener_1.default {
                 res.setEncoding('utf8');
                 res.on('data', chunk => rawBody += chunk);
                 res.on('end', () => {
-                    const regex = new RegExp(`<img\\s+.*?\\s+src='(http.*?i.sides.tv\\/comics\\/\\w+\\/\\d+\\/${panel}.(?:png|jpe?g|gif))'`);
+                    const regex = new RegExp(`<img\\s+.*?\\s+src='(http.*?i.sides.tv\\/comics\\/\\w+\\/\\d+\\/${panel}.(?:png|jpe?g|gif))'`, 'i');
                     const matches = rawBody.match(regex);
                     if (!matches || !matches[1])
-                        resolve(null);
+                        reject();
                     else
                         resolve(matches[1]);
                 });

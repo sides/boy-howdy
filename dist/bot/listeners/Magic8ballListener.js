@@ -4,7 +4,7 @@ const MessageListener_1 = require("lib/listeners/MessageListener");
 const Magic8ballResponse_1 = require("bot/responses/Magic8ballResponse");
 class Magic8ballListener extends MessageListener_1.default {
     match(message) {
-        return message.content.startsWith('🎱');
+        return super.match(message) && message.content.startsWith('🎱');
     }
     handle(message) {
         const response = new Magic8ballResponse_1.default(message.channel);

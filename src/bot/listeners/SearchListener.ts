@@ -4,7 +4,7 @@ import * as https from 'https'
 
 export default class SearchListener extends MessageListener {
   match(message: Message) {
-    return message.content.startsWith('🔍');
+    return super.match(message) && message.content.startsWith('🔍');
   }
 
   handle(message: Message) {
@@ -90,11 +90,11 @@ export default class SearchListener extends MessageListener {
         res.setEncoding('utf8');
         res.on('data', chunk => rawBody += chunk);
         res.on('end', () => {
-          const regex = new RegExp(`<img\\s+.*?\\s+src='(http.*?i.sides.tv\\/comics\\/\\w+\\/\\d+\\/${panel}.(?:png|jpe?g|gif))'`);
+          const regex = new RegExp(`<img\\s+.*?\\s+src='(http.*?i.sides.tv\\/comics\\/\\w+\\/\\d+\\/${panel}.(?:png|jpe?g|gif))'`, 'i');
           const matches = rawBody.match(regex);
 
           if (!matches || !matches[1])
-            resolve(null);
+            reject();
           else
             resolve(matches[1]);
         });

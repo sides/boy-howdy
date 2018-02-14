@@ -4,7 +4,7 @@ import Magic8ballResponse from 'bot/responses/Magic8ballResponse'
 
 export default class Magic8ballListener extends MessageListener {
   match(message: Message) {
-    return message.content.startsWith('🎱');
+    return super.match(message) && message.content.startsWith('🎱');
   }
 
   handle(message: Message) {

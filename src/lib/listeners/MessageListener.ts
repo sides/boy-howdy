@@ -7,7 +7,7 @@ export default class MessageListener implements IListener {
   }
 
   match(message: Message): boolean {
-    return true;
+    return message.channel.type === "text";
   }
 
   handle(message: Message) {
