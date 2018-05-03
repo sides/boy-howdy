@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "name": "discord-bot.js",
+  "dependencies": {
+    "bufferutil": "^3.0.3",
+    "discord.js": "^11.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.14",
+    "typescript": "^2.8.1"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  }
+}

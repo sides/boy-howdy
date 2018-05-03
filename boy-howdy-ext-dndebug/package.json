@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "name": "boy-howdy-ext-dndebug",
+  "dependencies": {
+    "discord-bot.js": "file:../discord-bot.js/"
+  },
+  "devDependencies": {
+    "@types/node": "^9.6.2",
+    "typescript": "^2.8.1"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "boy-howdy-extension": true
+}

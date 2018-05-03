@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "name": "boy-howdy",
+  "dependencies": {
+    "discord-bot.js": "file:../discord-bot.js/",
+    "boy-howdy-ext-commands": "file:../boy-howdy-ext-commands/"
+  }
+}
