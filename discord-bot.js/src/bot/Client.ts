@@ -1,6 +1,7 @@
 import { Client as BaseClient } from 'discord.js'
 import Config from './Config'
 import ExtensionManager from '../extend/ExtensionManager'
+import Sqlite3Storage from '../storage/Sqlite3Storage'
 
 /**
  * The `Client` class extends the base discord.js client, providing an interface for
@@ -10,7 +11,7 @@ export default class Client extends BaseClient {
     /**
      * The current discord-bot.js version.
      */
-    static readonly VERSION = 'alpha';
+    static readonly VERSION: string = require('../../package.json').version;
 
     /**
      * The configuration for the bot.
@@ -23,13 +24,19 @@ export default class Client extends BaseClient {
     readonly extensions: ExtensionManager;
 
     /**
+     * The (sqlite3) store for the bot.
+     */
+    readonly store: Sqlite3Storage;
+
+    /**
      * Client constructor.
      */
     constructor(config: Config) {
       super(config.clientOptions);
 
       this.config = config;
-      this.extensions = new ExtensionManager();
+      this.store = new Sqlite3Storage(config.storage.path);
+      this.extensions = new ExtensionManager(this);
     }
 
     /**
@@ -42,6 +49,17 @@ export default class Client extends BaseClient {
     }
 
     /**
+     * Logs out, terminates the connection to Discord, and destroys the client.
+     */
+    destroy() {
+      if (this.store) {
+        this.store.destroy();
+      }
+
+      return super.destroy();
+    }
+
+    /**
      * Runs when the bot has started boot.
      */
     protected booting() {
@@ -51,15 +69,10 @@ export default class Client extends BaseClient {
     /**
      * Runs when the bot has successfully logged into the Discord client.
      */
-    protected async booted() {
-      await this.extensions.reload();
-
-      this.emit('booted', this);
-    }
-
-    private async bootstrap() {
-      await this.extensions.reload();
-
-
+    protected booted() {
+      Promise.all([
+        this.extensions.reload()
+      ]).then(() => this.emit('readyAndBootstrapped', this))
+        .catch(err => { throw err; });
     }
 }

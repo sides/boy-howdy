@@ -3,6 +3,10 @@
   "name": "boy-howdy",
   "dependencies": {
     "discord-bot.js": "file:../discord-bot.js/",
+    "boy-howdy-ext-dndebug": "file:../boy-howdy-ext-dndebug/",
     "boy-howdy-ext-commands": "file:../boy-howdy-ext-commands/"
+  },
+  "scripts": {
+    "run": "node index.js"
   }
 }

@@ -1,25 +1,34 @@
-import * as pathUtil from 'path'
 import Client from '../bot/Client'
+import Storage from '../storage/ISqlStorage'
+import ExtensionRepository from './ExtensionRepository'
 
-type ExtensionListener = (...args: any[]) => void;
-type ExtensionBootstrapper = (event: string, listener: ExtensionListener) => void;
+export type ExtensionListener = (...args: any[]) => void;
+export type ExtensionBootstrapper = (event: string, listener: ExtensionListener) => void;
 
 export default class Extension {
   private mod: any;
   private subscribedListeners: {[event: string]: ExtensionListener};
 
+  id: string;
   name: string;
   version: string;
   path: string;
+  modulePath: string;
+  migrationsPath: string;
   enabled: boolean;
+  installed: Date;
 
-  constructor(name, version, path) {
+  constructor(id: string, name: string, version: string, path: string, modulePath: string, migrationsPath: string = null) {
+    this.id = id;
     this.name = name;
     this.version = version;
     this.path = path;
+    this.modulePath = modulePath;
+    this.migrationsPath = migrationsPath;
     this.enabled = false;
+    this.installed = null;
 
-    this.mod = require(path);
+    this.mod = require(modulePath);
     this.subscribedListeners = {};
   }
 
@@ -36,6 +45,8 @@ export default class Extension {
     this.mod.enable(bootstrapper);
 
     this.enabled = true;
+
+    client.emit('extensionWasEnabled', this);
   }
 
   disable(client: Client) {
@@ -50,19 +61,41 @@ export default class Extension {
     }
 
     this.enabled = false;
+
+    client.emit('extensionWasDisabled', this);
   }
 
-  static fromPackage(pack: any) {
-    if (!pack.path) {
-      throw new Error('Tried to build extension but package metadata has no path.');
+  install(store: Storage) {
+    if (this.mod.install) {
+      this.mod.install(store);
     }
 
-    const name = pack.name || 'unknown';
-    const version = pack.version || '0.0.0';
-    const path = pack.path;
-    const main = pack.main ? pack.main : './index.js';
-    const fullPath = pathUtil.join(path, main);
+    this.installed = new Date();
 
-    return new Extension(name, version, fullPath);
+    this.migrate(store, null, this.version);
+  }
+
+  migrate(store: Storage, oldVersion: string, newVersion: string) {
+    if (this.migrationsPath) {
+      if (newVersion === null) {
+        store.rollbackToMigration(-1, 'migrations-' + this.id);
+      } else {
+        store.migrate('migrations-' + this.id, this.migrationsPath);
+      }
+    }
+
+    if (this.mod.migrate) {
+      this.mod.migrate(store, oldVersion, newVersion);
+    }
+  }
+
+  uninstall(store: Storage) {
+    if (this.mod.uninstall) {
+      this.mod.uninstall(store);
+    }
+
+    this.migrate(store, this.version, null);
+
+    this.installed = null;
   }
 }

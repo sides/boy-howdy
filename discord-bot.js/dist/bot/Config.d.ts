@@ -12,7 +12,6 @@ export default class Config {
      * Whether or not the bot is in debug mode.
      */
     debug?: boolean;
-    extensions: string[];
     /**
      * Tokens and other information for connecting to other services.
      */
@@ -20,5 +19,8 @@ export default class Config {
         discord: {
             token: string;
         };
+    };
+    storage?: {
+        path: string;
     };
 }

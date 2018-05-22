@@ -1,17 +1,33 @@
 {
-  "private": true,
   "name": "discord-bot.js",
-  "dependencies": {
-    "bufferutil": "^3.0.3",
-    "discord.js": "^11.3.2"
-  },
-  "devDependencies": {
-    "@types/node": "^8.0.14",
-    "typescript": "^2.8.1"
-  },
+  "version": "0.1.0-alpha",
+  "description": "A library extension to discord.js that adds an extension API and other tools to help build a cohesive Discord bot.",
+  "author": "sides <sides@sides.tv>",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/sides/boy-howdy",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sides/boy-howdy.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sides/boy-howdy/issues"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "boy-howdy"
+  ],
+  "dependencies": {
+    "discord.js": "^11.3.2",
+    "sqlite": "^2.9.2"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.14",
+    "typescript": "^2.8.1"
   }
 }

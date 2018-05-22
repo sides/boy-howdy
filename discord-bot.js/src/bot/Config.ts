@@ -15,8 +15,6 @@ export default class Config {
    */
   debug?: boolean;
 
-  extensions: string[];
-
   /**
    * Tokens and other information for connecting to other services.
    */
@@ -25,4 +23,8 @@ export default class Config {
       token: string
     }
   };
+
+  storage?: {
+    path: string
+  }
 }

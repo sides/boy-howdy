@@ -1,13 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const pathUtil = require("path");
 class Extension {
-    constructor(name, version, path) {
+    constructor(id, name, version, path, modulePath, migrationsPath = null) {
+        this.id = id;
         this.name = name;
         this.version = version;
         this.path = path;
+        this.modulePath = modulePath;
+        this.migrationsPath = migrationsPath;
         this.enabled = false;
-        this.mod = require(path);
+        this.installed = null;
+        this.mod = require(modulePath);
         this.subscribedListeners = {};
     }
     enable(client) {
@@ -20,6 +23,7 @@ class Extension {
         };
         this.mod.enable(bootstrapper);
         this.enabled = true;
+        client.emit('extensionWasEnabled', this);
     }
     disable(client) {
         Object.keys(this.subscribedListeners).forEach(key => {
@@ -30,17 +34,34 @@ class Extension {
             this.mod.disable();
         }
         this.enabled = false;
+        client.emit('extensionWasDisabled', this);
     }
-    static fromPackage(pack) {
-        if (!pack.path) {
-            throw new Error('Tried to build extension but package metadata has no path.');
+    install(store) {
+        if (this.mod.install) {
+            this.mod.install(store);
         }
-        const name = pack.name || 'unknown';
-        const version = pack.version || '0.0.0';
-        const path = pack.path;
-        const main = pack.main ? pack.main : './index.js';
-        const fullPath = pathUtil.join(path, main);
-        return new Extension(name, version, fullPath);
+        this.installed = new Date();
+        this.migrate(store, null, this.version);
+    }
+    migrate(store, oldVersion, newVersion) {
+        if (this.migrationsPath) {
+            if (newVersion === null) {
+                store.rollbackToMigration(-1, 'migrations-' + this.id);
+            }
+            else {
+                store.migrate('migrations-' + this.id, this.migrationsPath);
+            }
+        }
+        if (this.mod.migrate) {
+            this.mod.migrate(store, oldVersion, newVersion);
+        }
+    }
+    uninstall(store) {
+        if (this.mod.uninstall) {
+            this.mod.uninstall(store);
+        }
+        this.migrate(store, this.version, null);
+        this.installed = null;
     }
 }
 exports.default = Extension;
