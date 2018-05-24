@@ -1,0 +1,1 @@
+[Boy Howdy's](https://github.com/sides/boy-howdy) core. It's a library extension to [discord.js](https://github.com/discordjs/discord.js) that adds an extension API and other tools to help build a cohesive Discord bot.
