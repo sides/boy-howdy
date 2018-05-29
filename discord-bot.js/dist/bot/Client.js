@@ -21,8 +21,7 @@ class Client extends discord_js_1.Client {
      * Start the application by logging into the client.
      */
     boot() {
-        this.booting();
-        this.on('ready', this.booted.bind(this));
+        this.on('ready', this.bootstrap);
         this.login(this.config.auth.discord.token);
     }
     /**
@@ -35,15 +34,9 @@ class Client extends discord_js_1.Client {
         return super.destroy();
     }
     /**
-     * Runs when the bot has started boot.
+     * Bootstraps the client. Runs after the bot successfully logs in.
      */
-    booting() {
-        this.emit('booting', this);
-    }
-    /**
-     * Runs when the bot has successfully logged into the Discord client.
-     */
-    booted() {
+    bootstrap() {
         Promise.all([
             this.extensions.reload()
         ]).then(() => this.emit('readyAndBootstrapped', this))

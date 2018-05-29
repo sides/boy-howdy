@@ -12,7 +12,6 @@ process.on('exit', destructor);
 process.on('SIGINT', destructor);
 process.on('SIGUSR1', destructor);
 process.on('SIGUSR2', destructor);
-process.on('uncaughtException', destructor);
 
 client.boot();
 

@@ -36,11 +36,7 @@ export default class Client extends BaseClient {
      */
     destroy(): Promise<void>;
     /**
-     * Runs when the bot has started boot.
+     * Bootstraps the client. Runs after the bot successfully logs in.
      */
-    protected booting(): void;
-    /**
-     * Runs when the bot has successfully logged into the Discord client.
-     */
-    protected booted(): void;
+    protected bootstrap(): void;
 }

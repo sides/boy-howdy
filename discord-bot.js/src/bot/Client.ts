@@ -43,8 +43,7 @@ export default class Client extends BaseClient {
      * Start the application by logging into the client.
      */
     boot() {
-      this.booting();
-      this.on('ready', this.booted.bind(this));
+      this.on('ready', this.bootstrap);
       this.login(this.config.auth.discord.token);
     }
 
@@ -60,16 +59,9 @@ export default class Client extends BaseClient {
     }
 
     /**
-     * Runs when the bot has started boot.
+     * Bootstraps the client. Runs after the bot successfully logs in.
      */
-    protected booting() {
-      this.emit('booting', this);
-    }
-
-    /**
-     * Runs when the bot has successfully logged into the Discord client.
-     */
-    protected booted() {
+    protected bootstrap() {
       Promise.all([
         this.extensions.reload()
       ]).then(() => this.emit('readyAndBootstrapped', this))

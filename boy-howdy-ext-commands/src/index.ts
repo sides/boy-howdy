@@ -1,14 +1,11 @@
 import { Client, ExtensionBootstrapper } from 'discord-bot.js'
-import Router from './Router'
-import Command from './Command'
+import Router from './route/Router'
 
 export function enable(on: ExtensionBootstrapper) {
-  const router = new Router();
+  on('readyAndBootstrapped', (client: Client) => {
+    const router = new Router(client);
 
-  on('configureCommandRouterCommands', commands => {
-    const cmd = new Command();
-    commands.push(cmd);
+    on('extensionsWereReloaded', router.reload.bind(router));
+    on('message', router.onMessage.bind(router));
   });
-
-  on('message', router.onMessage);
 }

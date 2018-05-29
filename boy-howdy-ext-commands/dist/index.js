@@ -1,13 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Router_1 = require("./Router");
-const Command_1 = require("./Command");
+const Router_1 = require("./route/Router");
 function enable(on) {
-    const router = new Router_1.default();
-    on('configureCommandRouterCommands', commands => {
-        const cmd = new Command_1.default();
-        commands.push(cmd);
+    on('readyAndBootstrapped', (client) => {
+        const router = new Router_1.default(client);
+        on('extensionsWereReloaded', router.reload.bind(router));
+        on('message', router.onMessage.bind(router));
     });
-    on('message', router.onMessage);
 }
 exports.enable = enable;
