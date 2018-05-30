@@ -31,6 +31,7 @@ class Client extends discord_js_1.Client {
         if (this.store) {
             this.store.destroy();
         }
+        this.emit('destroy');
         return super.destroy();
     }
     /**

@@ -27,4 +27,6 @@ export default class Config {
   storage?: {
     path: string
   }
+
+  [key: string]: any;
 }

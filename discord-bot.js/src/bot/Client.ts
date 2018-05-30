@@ -55,6 +55,8 @@ export default class Client extends BaseClient {
         this.store.destroy();
       }
 
+      this.emit('destroy');
+
       return super.destroy();
     }
 
