@@ -2,7 +2,8 @@
   "private": true,
   "name": "boy-howdy-ext-commands",
   "dependencies": {
-    "discord-bot.js": "file:../discord-bot.js/"
+    "discord-bot.js": "file:../discord-bot.js/",
+    "string-argv": "0.0.2"
   },
   "devDependencies": {
     "@types/node": "^9.6.2",

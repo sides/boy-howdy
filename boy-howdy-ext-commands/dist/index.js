@@ -5,7 +5,7 @@ function enable(on) {
     on('readyAndBootstrapped', (client) => {
         const router = new Router_1.default(client);
         on('extensionsWereReloaded', router.reload.bind(router));
-        on('message', router.onMessage.bind(router));
+        on('message', router.route.bind(router));
     });
 }
 exports.enable = enable;

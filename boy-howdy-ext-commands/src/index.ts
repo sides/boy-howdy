@@ -6,6 +6,6 @@ export function enable(on: ExtensionBootstrapper) {
     const router = new Router(client);
 
     on('extensionsWereReloaded', router.reload.bind(router));
-    on('message', router.onMessage.bind(router));
+    on('message', router.route.bind(router));
   });
 }

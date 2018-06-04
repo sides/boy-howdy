@@ -1,31 +1,39 @@
 import { Message } from 'discord.js'
 import ICommand from './ICommand'
-import CommandEvent from '../route/CommandEvent'
+import Request from '../route/Request'
 
 export default abstract class RegexCommand implements ICommand {
-  protected expression: RegExp;
+  protected pattern: RegExp;
 
   protected abstract matched(message: Message, values: RegExpExecArray | RegExpExecArray[]);
 
-  handle(e: CommandEvent) {
-    let result = this.expression.exec(e.message.content);
+  protected quickMatch(message: Message) {
+    return true;
+  }
+
+  handle(request: Request) {
+    if (!this.quickMatch(request.originalMessage)) {
+      return;
+    }
+
+    let result = this.pattern.exec(request.originalMessage.content);
 
     if (!result) {
       return;
     }
 
-    if (!this.expression.global) {
-      this.matched(e.message, result);
+    if (!this.pattern.global) {
+      this.matched(request.originalMessage, result);
     } else {
       let resultSet = [result];
 
-      while (result = this.expression.exec(e.message.content)) {
+      while (result = this.pattern.exec(request.originalMessage.content)) {
         resultSet.push(result);
       }
 
-      this.matched(e.message, resultSet);
+      this.matched(request.originalMessage, resultSet);
     }
 
-    e.handled = true;
+    request.handled = true;
   }
 }

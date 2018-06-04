@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class Command {
-    handle(e) {
-        if (this.match(e.message)) {
-            this.matched(e.message);
-            e.handled = true;
+    handle(request) {
+        if (this.match(request.originalMessage)) {
+            this.matched(request.originalMessage);
+            request.handled = true;
         }
     }
 }

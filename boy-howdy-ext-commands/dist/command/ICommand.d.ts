@@ -1,4 +1,4 @@
-import CommandEvent from '../route/CommandEvent';
+import Request from '../route/Request';
 export default interface ICommand {
-    handle(e: CommandEvent): void;
+    handle(request: Request): void;
 }

@@ -1,16 +1,16 @@
 import { Message } from 'discord.js'
-import CommandEvent from '../route/CommandEvent'
+import Request from '../route/Request'
 import ICommand from './ICommand'
 
 export default abstract class Command implements ICommand {
   protected abstract match(message: Message);
   protected abstract matched(message: Message);
 
-  handle(e: CommandEvent) {
-    if (this.match(e.message)) {
-      this.matched(e.message);
+  handle(request: Request) {
+    if (this.match(request.originalMessage)) {
+      this.matched(request.originalMessage);
 
-      e.handled = true;
+      request.handled = true;
     }
   }
 }
