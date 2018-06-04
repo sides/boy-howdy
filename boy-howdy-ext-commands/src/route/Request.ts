@@ -86,7 +86,7 @@ export default class Request {
     return args ? args[0] : null;
   }
 
-  public constructor(message: Message, availableSignals: Signal[]) {
+  constructor(message: Message, availableSignals: Signal[]) {
     this.handled = false;
     this.originalMessage = message;
     this._availableSignals = availableSignals;

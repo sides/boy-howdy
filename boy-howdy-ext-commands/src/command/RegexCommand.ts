@@ -3,7 +3,7 @@ import ICommand from './ICommand'
 import Request from '../route/Request'
 
 export default abstract class RegexCommand implements ICommand {
-  protected pattern: RegExp;
+  protected _pattern: RegExp;
 
   protected abstract matched(message: Message, values: RegExpExecArray | RegExpExecArray[]);
 
@@ -11,23 +11,23 @@ export default abstract class RegexCommand implements ICommand {
     return true;
   }
 
-  handle(request: Request) {
+  public handle(request: Request) {
     if (!this.quickMatch(request.originalMessage)) {
       return;
     }
 
-    let result = this.pattern.exec(request.originalMessage.content);
+    let result = this._pattern.exec(request.originalMessage.content);
 
     if (!result) {
       return;
     }
 
-    if (!this.pattern.global) {
+    if (!this._pattern.global) {
       this.matched(request.originalMessage, result);
     } else {
       let resultSet = [result];
 
-      while (result = this.pattern.exec(request.originalMessage.content)) {
+      while (result = this._pattern.exec(request.originalMessage.content)) {
         resultSet.push(result);
       }
 

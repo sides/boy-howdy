@@ -9,41 +9,41 @@ type ExtensionRecord = {
 };
 
 export default class ExtensionRepository {
-  private store: ISqlStorage;
+  private _store: ISqlStorage;
 
   constructor(store: ISqlStorage) {
-    this.store = store;
+    this._store = store;
   }
 
-  getAll() {
-    return this.store.all<ExtensionRecord>(`
+  public getAll() {
+    return this._store.all<ExtensionRecord>(`
       SELECT id, enabled, version, installed_on
       FROM extensions
     `);
   }
 
-  add(extension: Extension) {
-    this.store.run(`
+  public add(extension: Extension) {
+    this._store.run(`
       INSERT INTO extensions (id, enabled, version, installed_on)
       VALUES (?, ?, ?, ?)
     `, extension.id, extension.enabled ? 1 : 0, extension.version, extension.installed ? extension.installed.toISOString() : null);
   }
 
-  update(extension: Extension) {
-    this.store.run(`
+  public update(extension: Extension) {
+    this._store.run(`
       UPDATE extensions
       SET enabled = ?, version = ?, installed_on = ?
       WHERE id = ?
     `, extension.enabled ? 1 : 0, extension.version, extension.installed ? extension.installed.toISOString() : null, extension.id);
   }
 
-  remove(id: string) {
-    this.store.run(`
+  public remove(id: string) {
+    this._store.run(`
       DELETE FROM extensions
       WHERE id = ?
     `, id);
 
-    this.store.run(`
+    this._store.run(`
       DROP TABLE IF EXISTS "migrations-${id}"
     `);
   }

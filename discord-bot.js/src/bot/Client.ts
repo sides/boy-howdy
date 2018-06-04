@@ -11,22 +11,22 @@ export default class Client extends BaseClient {
     /**
      * The current discord-bot.js version.
      */
-    static readonly VERSION: string = require('../../package.json').version;
+    public static readonly VERSION: string = require('../../package.json').version;
 
     /**
      * The configuration for the bot.
      */
-    readonly config: Config;
+    public readonly config: Config;
 
     /**
      * The extension manager for the bot.
      */
-    readonly extensions: ExtensionManager;
+    public readonly extensions: ExtensionManager;
 
     /**
      * The (sqlite3) store for the bot.
      */
-    readonly store: Sqlite3Storage;
+    public readonly store: Sqlite3Storage;
 
     /**
      * Client constructor.
@@ -42,7 +42,7 @@ export default class Client extends BaseClient {
     /**
      * Start the application by logging into the client.
      */
-    boot() {
+    public boot() {
       this.on('ready', this.bootstrap);
       this.login(this.config.auth.discord.token);
     }
@@ -50,7 +50,7 @@ export default class Client extends BaseClient {
     /**
      * Logs out, terminates the connection to Discord, and destroys the client.
      */
-    destroy() {
+    public destroy() {
       if (this.store) {
         this.store.destroy();
       }

@@ -6,17 +6,17 @@ export type ExtensionListener = (...args: any[]) => void;
 export type ExtensionBootstrapper = (event: string, listener: ExtensionListener) => void;
 
 export default class Extension {
-  private mod: any;
-  private subscribedListeners: {[event: string]: ExtensionListener};
+  private _mod: any;
+  private _subscribedListeners: {[event: string]: ExtensionListener};
 
-  id: string;
-  name: string;
-  version: string;
-  path: string;
-  modulePath: string;
-  migrationsPath: string;
-  enabled: boolean;
-  installed: Date;
+  public id: string;
+  public name: string;
+  public version: string;
+  public path: string;
+  public modulePath: string;
+  public migrationsPath: string;
+  public enabled: boolean;
+  public installed: Date;
 
   constructor(id: string, name: string, version: string, path: string, modulePath: string, migrationsPath: string = null) {
     this.id = id;
@@ -28,36 +28,36 @@ export default class Extension {
     this.enabled = false;
     this.installed = null;
 
-    this.mod = require(modulePath);
-    this.subscribedListeners = {};
+    this._mod = require(modulePath);
+    this._subscribedListeners = {};
   }
 
-  enable(client: Client) {
-    if (!this.mod.enable) {
+  public enable(client: Client) {
+    if (!this._mod.enable) {
       throw new Error('Extension module has no "enable" method.');
     }
 
     const bootstrapper: ExtensionBootstrapper = (event: string, listener: ExtensionListener) => {
-      this.subscribedListeners[event] = listener;
+      this._subscribedListeners[event] = listener;
       client.addListener(event, listener);
     };
 
-    this.mod.enable(bootstrapper);
+    this._mod.enable(bootstrapper);
 
     this.enabled = true;
 
     client.emit('extensionWasEnabled', this);
   }
 
-  disable(client: Client) {
-    Object.keys(this.subscribedListeners).forEach(key => {
-      client.removeListener(key, this.subscribedListeners[key]);
+  public disable(client: Client) {
+    Object.keys(this._subscribedListeners).forEach(key => {
+      client.removeListener(key, this._subscribedListeners[key]);
     });
 
-    this.subscribedListeners = {};
+    this._subscribedListeners = {};
 
-    if (this.mod.disable) {
-      this.mod.disable();
+    if (this._mod.disable) {
+      this._mod.disable();
     }
 
     this.enabled = false;
@@ -65,9 +65,9 @@ export default class Extension {
     client.emit('extensionWasDisabled', this);
   }
 
-  install(store: Storage) {
-    if (this.mod.install) {
-      this.mod.install(store);
+  public install(store: Storage) {
+    if (this._mod.install) {
+      this._mod.install(store);
     }
 
     this.installed = new Date();
@@ -75,7 +75,7 @@ export default class Extension {
     this.migrate(store, null, this.version);
   }
 
-  migrate(store: Storage, oldVersion: string, newVersion: string) {
+  public migrate(store: Storage, oldVersion: string, newVersion: string) {
     if (this.migrationsPath) {
       if (newVersion === null) {
         store.rollbackToMigration(-1, 'migrations-' + this.id);
@@ -84,14 +84,14 @@ export default class Extension {
       }
     }
 
-    if (this.mod.migrate) {
-      this.mod.migrate(store, oldVersion, newVersion);
+    if (this._mod.migrate) {
+      this._mod.migrate(store, oldVersion, newVersion);
     }
   }
 
-  uninstall(store: Storage) {
-    if (this.mod.uninstall) {
-      this.mod.uninstall(store);
+  public uninstall(store: Storage) {
+    if (this._mod.uninstall) {
+      this._mod.uninstall(store);
     }
 
     this.migrate(store, this.version, null);

@@ -27,7 +27,7 @@ export default class Router {
     this.reload();
   }
 
-  reload() {
+  public reload() {
     this.signals = [];
 
     if (this._client.config.commands.signal) {
@@ -44,7 +44,7 @@ export default class Router {
     this._client.emit('configureCommandRouter', this);
   }
 
-  route(message: Message) {
+  public route(message: Message) {
     // We will not route any messages sent by the client itself.
     if (message.author.id === this._client.user.id) {
       return;

@@ -6,28 +6,28 @@ import ExtensionRepository from './ExtensionRepository'
 import { getInstalledPackages } from '../util/npm'
 
 export default class ExtensionManager {
-  private extensions: Extension[];
-  private client: Client;
-  private store: Storage;
-  private repository: ExtensionRepository;
+  private _extensions: Extension[];
+  private _client: Client;
+  private _store: Storage;
+  private _repository: ExtensionRepository;
 
-  get all() {
-    return this.extensions;
+  public get all() {
+    return this._extensions;
   }
 
-  get enabled() {
-    return this.extensions.filter(extension => extension.enabled);
+  public get enabled() {
+    return this._extensions.filter(extension => extension.enabled);
   }
 
-  get disabled() {
-    return this.extensions.filter(extension => !extension.enabled);
+  public get disabled() {
+    return this._extensions.filter(extension => !extension.enabled);
   }
 
   constructor(client: Client) {
-    this.extensions = [];
-    this.client = client;
-    this.store = client.store;
-    this.repository = new ExtensionRepository(client.store);
+    this._extensions = [];
+    this._client = client;
+    this._store = client.store;
+    this._repository = new ExtensionRepository(client.store);
   }
 
   /**
@@ -35,40 +35,40 @@ export default class ExtensionManager {
    *
    * @todo This is a simplified `sync`. Find a way to combine the two into one method.
    */
-  save() {
-    this.extensions.forEach(extension => {
-      this.repository.update(extension);
+  public save() {
+    this._extensions.forEach(extension => {
+      this._repository.update(extension);
     });
   }
 
   /**
    * Reloads extensions.
    */
-  async reload() {
-    this.client.emit('extensionsWillBeReloaded', this.extensions);
+  public async reload() {
+    this._client.emit('extensionsWillBeReloaded', this._extensions);
 
     // Begin by disabling all the current extensions.
-    this.extensions.forEach(extension => {
-      extension.disable(this.client);
+    this._extensions.forEach(extension => {
+      extension.disable(this._client);
     });
 
     // Fetch a new list of all installed extensions from npm.
-    this.extensions = await this.getLoadedExtensions();
+    this._extensions = await this.getLoadedExtensions();
 
-    console.log('bootstrapped with ' + this.extensions.length + ' extensions');
+    console.log('bootstrapped with ' + this._extensions.length + ' extensions');
 
     // Synchronize the extensions in storage with the new list.
     await this.sync();
 
-    this.extensions.forEach(extension => {
+    this._extensions.forEach(extension => {
       console.log('loaded extension: '
         + extension.name
         + ` (enabled? ${extension.enabled ? 'yes' : 'no'}, installed on ${extension.installed ? extension.installed.toLocaleString() : 'never'})`);
     });
 
-    this.client.emit('extensionsWereReloaded', this.extensions);
+    this._client.emit('extensionsWereReloaded', this._extensions);
 
-    return this.extensions;
+    return this._extensions;
   }
 
   /**
@@ -80,9 +80,9 @@ export default class ExtensionManager {
    */
   private async sync() {
     // Get all extensions that have been stored in the database.
-    let records = await this.repository.getAll();
+    let records = await this._repository.getAll();
 
-    this.extensions.forEach(extension => {
+    this._extensions.forEach(extension => {
       const foundRecord = records.findIndex(record => record.id == extension.id);
 
       if (foundRecord !== -1) {
@@ -90,30 +90,30 @@ export default class ExtensionManager {
 
         if (record.enabled) {
           if (!record.installed_on) {
-            extension.install(this.store);
+            extension.install(this._store);
           } else {
             extension.installed = new Date(record.installed_on);
 
             if (extension.version && record.version != extension.version) {
-              extension.migrate(this.store, record.version, extension.version);
+              extension.migrate(this._store, record.version, extension.version);
             }
           }
 
-          extension.enable(this.client);
+          extension.enable(this._client);
 
-          this.repository.update(extension);
+          this._repository.update(extension);
         }
 
         records.splice(foundRecord, 1);
       } else {
-        this.repository.add(extension);
+        this._repository.add(extension);
       }
     });
 
     // Found records were removed from this array. The records that remain are for uninstalled
     // packages.
     records.forEach(record => {
-      this.repository.remove(record.id);
+      this._repository.remove(record.id);
     });
   }
 
