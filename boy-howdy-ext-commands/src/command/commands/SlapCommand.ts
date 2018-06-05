@@ -1,5 +1,4 @@
-import { User, GuildMember } from 'discord-bot.js'
-import Request from '../../route/Request'
+import { User } from 'discord-bot.js'
 import FormalCommand from '../FormalCommand'
 import FormalCommandContext from '../FormalCommandContext'
 import UserMutator from '../mutate/UserMutator'
