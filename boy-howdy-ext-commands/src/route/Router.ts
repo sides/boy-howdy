@@ -46,11 +46,6 @@ export default class Router {
   }
 
   public route(message: Message) {
-    // We will not route any messages sent by the client itself.
-    if (message.author.id === this._client.user.id) {
-      return;
-    }
-
     const request = new Request(message, this.signals);
 
     // Begin by going over informal commands that could be anything. Since this
