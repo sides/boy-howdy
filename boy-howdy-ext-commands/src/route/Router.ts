@@ -1,4 +1,4 @@
-import { Client, Message } from 'discord-bot.js'
+import { Client, Message, DMChannel } from 'discord-bot.js'
 import ICommand from '../command/ICommand'
 import Request from './Request'
 import Registry from './Registry'
@@ -58,7 +58,7 @@ export default class Router {
     // Get the signal for the request. If no signal is found, return immediately.
     // This avoids doing any heavy parsing since we know formal commands need a
     // signal.
-    if (request.signal === null) {
+    if (request.signal === null && !(request.originalMessage.channel instanceof DMChannel)) {
       return;
     }
 
