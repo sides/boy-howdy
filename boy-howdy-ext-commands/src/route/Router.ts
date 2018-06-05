@@ -1,10 +1,10 @@
-import { Message } from 'discord.js'
-import { Client } from 'discord-bot.js'
+import { Client, Message } from 'discord-bot.js'
 import ICommand from '../command/ICommand'
 import Request from './Request'
 import Registry from './Registry'
 import Signal from './Signal'
 import VersionCommand from '../command/commands/VersionCommand'
+import SlapCommand from '../command/commands/SlapCommand'
 
 export default class Router {
   private _client: Client;
@@ -40,6 +40,7 @@ export default class Router {
 
     this.registry.clear();
     this.registry.register(new VersionCommand());
+    this.registry.register(new SlapCommand());
 
     this._client.emit('configureCommandRouter', this);
   }

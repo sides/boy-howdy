@@ -1,4 +1,4 @@
-import { User } from 'discord.js'
+import { User } from 'discord-bot.js'
 
 export type SignalType = 'start' | 'end' | 'both';
 

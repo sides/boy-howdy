@@ -1,4 +1,4 @@
-import { Message } from 'discord.js'
+import { Message } from 'discord-bot.js'
 import Request from '../route/Request'
 import ICommand from './ICommand'
 

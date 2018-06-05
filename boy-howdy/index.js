@@ -13,6 +13,11 @@ process.on('SIGINT', destructor);
 process.on('SIGUSR1', destructor);
 process.on('SIGUSR2', destructor);
 
+process.on('unhandledRejection', error => {
+  console.log(error);
+  process.exit(2);
+});
+
 client.boot();
 
 module.exports.default = client;
