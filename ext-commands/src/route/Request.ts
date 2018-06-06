@@ -35,8 +35,13 @@ export default class Request {
     }
 
     for (let i = 0, l = this._availableSignals.length; i < l; i++) {
-      if (this._availableSignals[i].isSignalled(this.originalMessage.content)) {
-        return this._signal = this._availableSignals[i].toString();
+      const result = this._availableSignals[i].clean(this.originalMessage.content);
+
+      if (result !== false) {
+        this._signal = this._availableSignals[i].toString();
+        this._content = result;
+
+        return this._signal;
       }
     }
 
@@ -52,11 +57,9 @@ export default class Request {
       return this._content;
     }
 
-    if (this.signal === null) {
-      return this._content = this.originalMessage.content;
-    } else {
-      return this._content = this.originalMessage.content.slice(this.signal.length);
-    }
+    return this.signal !== null
+      ? this._content
+      : this._content = this.originalMessage.content;
   }
 
   /**
@@ -70,20 +73,7 @@ export default class Request {
 
     const args: string[] = argv(this.content);
 
-    if (!args || args.length <= 0) {
-      return this._arguments = null;
-    }
-
     return this._arguments = args;
-  }
-
-  /**
-   * The first argument of the request's `arguments`.
-   */
-  public get command() {
-    const args = this.arguments;
-
-    return args ? args[0] : null;
   }
 
   constructor(message: Message, availableSignals: Signal[]) {

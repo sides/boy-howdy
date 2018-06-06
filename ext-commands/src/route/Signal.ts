@@ -11,16 +11,19 @@ export default class Signal {
     this._type = type;
   }
 
-  public isSignalled(content: string) {
-    switch (this._type) {
-      case 'start':
-        return content.startsWith(this._signal);
-      case 'both':
-        return content.startsWith(this._signal) || content.endsWith(this._signal);
-      case 'end':
-        return content.endsWith(this._signal);
-      default:
+  public clean(content: string) {
+    if (this._type !== 'end') {
+      if (content.startsWith(this._signal)) {
+        return content.slice(this._signal.length);
+      } else if (content.endsWith(this._signal)) {
+        return content.slice(0, -this._signal.length);
+      } else {
         return false;
+      }
+    } else {
+      return content.endsWith(this._signal)
+        ? content.slice(0, -this._signal.length)
+        : false;
     }
   }
 
@@ -29,6 +32,6 @@ export default class Signal {
   }
 
   public static createMentionSignal(user: User) {
-    return new this(`<@${user.id}> `, 'both');
+    return new this(`<@${user.id}>`, 'both');
   }
 }

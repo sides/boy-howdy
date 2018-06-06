@@ -30,19 +30,17 @@ export default abstract class FormalCommand implements ICommand {
   }
 
   public async handle(request: Request) {
-    if (this.name === request.command) {
-      const context = new FormalCommandContext(request.originalMessage.client as Client,
-        request.originalMessage.channel,
-        request.originalMessage.author,
-        request.content);
+    const context = new FormalCommandContext(request.originalMessage.client as Client,
+      request.originalMessage.channel,
+      request.originalMessage.author,
+      request.content);
 
-      let args: any[] = [context];
+    let args: any[] = [context];
 
-      args.push.apply(args, await this.mutateArgs(context, request.arguments.slice(1)));
+    args.push.apply(args, await this.mutateArgs(context, request.arguments.slice(1)));
 
-      this.respond.apply(this, args);
+    this.respond.apply(this, args);
 
-      request.handled = true;
-    }
+    request.handled = true;
   }
 }

@@ -48,39 +48,30 @@ export default class Router {
   public route(message: Message) {
     const request = new Request(message, this.signals);
 
-    // Begin by going over informal commands that could be anything. Since this
-    // is ran on every message, having many informal commands can negatively affect
-    // performance, especially if they are not optimized with quick matching.
-    if (this.handleCommands(request, this.registry.getInformalCommands())) {
-      return;
-    }
-
-    // Get the signal for the request. If no signal is found, return immediately.
-    // This avoids doing any heavy parsing since we know formal commands need a
-    // signal.
-    if (request.signal === null && request.originalMessage.channel.type !== 'dm') {
-      return;
-    }
-
-    // We also know that if the request doesn't find any valid command name,
-    // no formal command is going to match it. So we can return right away.
-    if (request.command === null) {
-      return;
-    }
-
-    // Finally we can try to handle our registered formal commands.
-    this.handleCommands(request, this.registry.getFormalCommands());
-  }
-
-  private handleCommands(request: Request, commands: ICommand[]) {
+    // Begin by going over generic commands that could be anything.
+    const commands = this.registry.getGenericCommands();
     for (let i = 0, l = commands.length; i < l; i++) {
       commands[i].handle(request);
 
       if (request.handled) {
-        return true;
+        return;
       }
     }
 
-    return false;
+    // Get the signal for the request. If no signal is found, return immediately.
+    // A signal is not required for DMs. We will also return if no arguments were
+    // found.
+    if ((request.signal === null && request.originalMessage.channel.type !== 'dm') || request.arguments.length === 0) {
+      return;
+    }
+
+    // Formal commands always handle a request without checking if their name
+    // matches the first argument. As such, we use the registry's map to find
+    // what command we want to run here, which is keyed by their names.
+    const command = this.registry.getFormalCommands().get(request.arguments[0]);
+
+    if (command !== undefined) {
+      command.handle(request);
+    }
   }
 }

@@ -2,36 +2,32 @@ import ICommand from '../command/ICommand'
 import FormalCommand from '../command/FormalCommand'
 
 export default class Registry {
-  private _formalCommands: FormalCommand[];
-  private _informalCommands: ICommand[];
+  private _formalCommands: Map<string, FormalCommand>;
+  private _genericCommands: ICommand[];
 
   constructor() {
-    this._formalCommands = [];
-    this._informalCommands = [];
+    this._formalCommands = new Map();
+    this._genericCommands = [];
   }
 
   public getFormalCommands() {
-    return this._formalCommands.slice();
+    return this._formalCommands;
   }
 
-  public getInformalCommands() {
-    return this._informalCommands.slice();
-  }
-
-  public getAllCommands() {
-    return (this._formalCommands as ICommand[]).concat(this._informalCommands);
+  public getGenericCommands() {
+    return this._genericCommands;
   }
 
   public clear() {
-    this._formalCommands = [];
-    this._informalCommands = [];
+    this._formalCommands = new Map();
+    this._genericCommands = [];
   }
 
   public register(command: ICommand, priority = 0) {
     if (command instanceof FormalCommand) {
-      this._formalCommands.push(command);
+      this._formalCommands.set(command.name, command);
     } else {
-      this._informalCommands.push(command);
+      this._genericCommands.push(command);
     }
   }
 }
