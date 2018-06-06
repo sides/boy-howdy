@@ -58,7 +58,7 @@ export default class Router {
     // Get the signal for the request. If no signal is found, return immediately.
     // This avoids doing any heavy parsing since we know formal commands need a
     // signal.
-    if (request.signal === null && !(request.originalMessage.channel instanceof DMChannel)) {
+    if (request.signal === null && request.originalMessage.channel.type !== 'dm') {
       return;
     }
 
