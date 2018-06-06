@@ -1,4 +1,4 @@
-import { Client, User, GuildChannel } from 'discord-bot.js'
+import { User, GuildChannel } from 'boy-howdy-core'
 import FormalCommandContext from '../FormalCommandContext'
 import IMutator from './IMutator'
 
@@ -22,6 +22,6 @@ export default class UserMutator implements IMutator<User> {
       }
     }
 
-    return Promise.reject();
+    return Promise.reject(undefined);
   }
 }

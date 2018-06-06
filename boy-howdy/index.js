@@ -1,7 +1,7 @@
-const discordbot = require('discord-bot.js')
+const core = require('boy-howdy-core')
 const config = require('./config.json');
 
-const client = new discordbot.Client(config);
+const client = new core.Client(config);
 
 function destructor() {
   console.log('Process exiting, destroying client...');

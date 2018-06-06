@@ -1,4 +1,4 @@
-import { Message } from 'discord-bot.js'
+import { Message } from 'boy-howdy-core'
 import Request from '../route/Request'
 import ICommand from './ICommand'
 

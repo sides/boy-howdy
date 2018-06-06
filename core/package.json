@@ -1,5 +1,5 @@
 {
-  "name": "discord-bot.js",
+  "name": "boy-howdy-core",
   "version": "0.1.0-alpha",
   "description": "A library extension to discord.js that adds an extension API and other tools to help build a cohesive Discord bot.",
   "author": "sides <sides@sides.tv>",

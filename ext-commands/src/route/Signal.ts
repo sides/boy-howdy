@@ -1,4 +1,4 @@
-import { User } from 'discord-bot.js'
+import { User } from 'boy-howdy-core'
 
 export type SignalType = 'start' | 'end' | 'both';
 

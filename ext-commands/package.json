@@ -2,7 +2,7 @@
   "private": true,
   "name": "boy-howdy-ext-commands",
   "dependencies": {
-    "discord-bot.js": "file:../discord-bot.js/",
+    "boy-howdy-core": "file:../core/",
     "string-argv": "0.0.2"
   },
   "devDependencies": {

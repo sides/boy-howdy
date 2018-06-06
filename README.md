@@ -4,7 +4,7 @@ Boy Howdy is in an alpha stage and shouldn't be used for any purpose, probably n
 
 This repository contains many different packages that together form Boy Howdy, an extensible Discord bot.
 
-The `boy-howdy` package is a skeleton bot built on top of the `discord-bot.js` library, which in turn is built on top of the excellent [`discord.js`](https://github.com/discordjs/discord.js) package. It also comes with some pre-installed extensions that form the basic functionality expected of a bot. Namely, this is the `boy-howdy-ext-commands` package, which adds a command interface to the bot.
+The `boy-howdy` package is a skeleton bot that uses the `boy-howdy-core` library, which in turn is built on top of [`discord.js`](https://github.com/discordjs/discord.js). It also comes with some pre-installed extensions that form the basic functionality expected of a bot. Namely, this is the `boy-howdy-ext-commands` package, which adds a command interface to the bot.
 
 ## Installation
 

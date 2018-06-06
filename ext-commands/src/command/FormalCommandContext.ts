@@ -1,4 +1,4 @@
-import { Client, TextChannel, DMChannel, GroupDMChannel, User } from 'discord-bot.js'
+import { Client, TextChannel, DMChannel, GroupDMChannel, User } from 'boy-howdy-core'
 import Request from '../route/Request'
 
 export default class FormalCommandContext {

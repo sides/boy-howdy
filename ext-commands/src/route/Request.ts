@@ -1,4 +1,4 @@
-import { Message } from 'discord-bot.js'
+import { Message } from 'boy-howdy-core'
 import * as argv from 'string-argv'
 import Signal from './Signal'
 

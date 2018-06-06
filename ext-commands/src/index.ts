@@ -1,4 +1,4 @@
-import { Client, ExtensionBootstrapper, Message } from 'discord-bot.js'
+import { Client, ExtensionBootstrapper, Message } from 'boy-howdy-core'
 import Router from './route/Router'
 
 export function enable(on: ExtensionBootstrapper) {

@@ -1,4 +1,4 @@
-import { Client, Message, DMChannel } from 'discord-bot.js'
+import { Client, Message, DMChannel } from 'boy-howdy-core'
 import ICommand from '../command/ICommand'
 import Request from './Request'
 import Registry from './Registry'

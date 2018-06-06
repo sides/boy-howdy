@@ -2,7 +2,7 @@
   "private": true,
   "name": "boy-howdy-ext-dndebug",
   "dependencies": {
-    "discord-bot.js": "file:../discord-bot.js/"
+    "boy-howdy-core": "file:../core/"
   },
   "boy-howdy-extension": {
     "id": "dndebug@sides.tv"

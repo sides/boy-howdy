@@ -1,4 +1,4 @@
-import { User } from 'discord-bot.js'
+import { User } from 'boy-howdy-core'
 import FormalCommand from '../FormalCommand'
 import FormalCommandContext from '../FormalCommandContext'
 import UserMutator from '../mutate/UserMutator'

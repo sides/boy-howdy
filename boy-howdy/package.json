@@ -2,9 +2,9 @@
   "private": true,
   "name": "boy-howdy",
   "dependencies": {
-    "boy-howdy-ext-commands": "file:../boy-howdy-ext-commands/",
-    "boy-howdy-ext-dndebug": "file:../boy-howdy-ext-dndebug/",
-    "discord-bot.js": "file:../discord-bot.js/",
+    "boy-howdy-ext-commands": "file:../ext-commands/",
+    "boy-howdy-ext-dndebug": "file:../ext-dndebug/",
+    "boy-howdy-core": "file:../core/",
     "bufferutil": "^3.0.5"
   },
   "scripts": {

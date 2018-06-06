@@ -9,7 +9,7 @@ import Sqlite3Storage from '../storage/Sqlite3Storage'
  */
 export default class Client extends BaseClient {
     /**
-     * The current discord-bot.js version.
+     * The current Boy Howdy version.
      */
     public static readonly VERSION: string = require('../../package.json').version;
 

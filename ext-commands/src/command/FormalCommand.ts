@@ -1,4 +1,4 @@
-import { Client } from 'discord-bot.js'
+import { Client } from 'boy-howdy-core'
 import ICommand from './ICommand'
 import FormalCommandContext from './FormalCommandContext'
 import Request from '../route/Request'
