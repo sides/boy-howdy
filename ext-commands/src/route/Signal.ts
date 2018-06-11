@@ -12,18 +12,29 @@ export default class Signal {
   }
 
   public clean(content: string) {
-    if (this._type !== 'end') {
-      if (content.startsWith(this._signal)) {
-        return content.slice(this._signal.length);
-      } else if (content.endsWith(this._signal)) {
-        return content.slice(0, -this._signal.length);
-      } else {
+    switch (this._type) {
+      case 'start':
+        if (content.startsWith(this._signal)) {
+          return content.slice(this._signal.length);
+        }
+
         return false;
-      }
-    } else {
-      return content.endsWith(this._signal)
-        ? content.slice(0, -this._signal.length)
-        : false;
+      case 'both':
+        if (content.startsWith(this._signal)) {
+          return content.slice(this._signal.length);
+        } else if (content.endsWith(this._signal)) {
+          return content.slice(0, -this._signal.length);
+        }
+
+        return false;
+      case 'end':
+        if (content.endsWith(this._signal)) {
+          return content.slice(0, -this._signal.length);
+        }
+
+        return false;
+      default:
+        return false;
     }
   }
 
