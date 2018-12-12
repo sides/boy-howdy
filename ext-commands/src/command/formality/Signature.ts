@@ -29,19 +29,19 @@ export default class Signature {
         }
 
         return signature;
-      } else {
-        if (signature.endsWith('?')) {
-          return {
-            name: signature.slice(0, -1),
-            required: false
-          };
-        } else {
-          this._numRequiredArgs++;
+      }
 
-          return {
-            name: signature,
-            required: true
-          }
+      if (signature.endsWith('?')) {
+        return {
+          name: signature.slice(0, -1),
+          required: false
+        };
+      } else {
+        this._numRequiredArgs++;
+
+        return {
+          name: signature,
+          required: true
         }
       }
     });

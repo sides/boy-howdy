@@ -18,14 +18,12 @@ export default class SignatureError extends Error {
   }
 
   public toString() {
-    let i = -1;
+    const msg = [];
 
-    return this.args.map(arg => {
-      i++;
+    for (let i = 0; i < this.args.length; i++) {
+      msg.push(this.index === i ? `->${this.args[i]}<-` : this.args[i]);
+    }
 
-      return this.index === i
-        ? `->${arg}<-`
-        : arg;
-    }).join(' ');
+    return msg.join(' ');
   }
 }

@@ -57,10 +57,15 @@ export default abstract class FormalCommand implements ICommand {
    *       spent processing rarely used signatures.
    */
   protected async processArguments(context: Context, rawArgs: string[]) {
+    if (this._signatures.length === 0) {
+      return rawArgs;
+    }
+
     let bestError: SignatureError;
 
     for (let i = 0; i < this._signatures.length; i++) {
       try {
+        // Return the first signature that succeeds.
         return await this._signatures[i].process(context, rawArgs);
       } catch (err) {
         if (err instanceof SignatureError) {
