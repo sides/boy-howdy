@@ -6,25 +6,23 @@ import UserMutator from '../formality/UserMutator'
 
 export default class SlapCommand extends FormalCommand {
   protected _signatures = [
-    new Signature({ overflow: 'error' },
+    new Signature(
       {
         name: 'slappee',
         description: 'The user to slap.',
-        required: true,
         mutator: new UserMutator()
       }
     ),
-    new Signature({},
+    new Signature(
       {
         name: 'slapper',
         description: 'The user who does the slapping.',
-        required: true,
         mutator: new UserMutator()
       },
       {
-        name: 'slappee',
-        description: 'The user to slap.',
-        required: true,
+        name: 'slappees',
+        greedy: true,
+        description: 'The user(s) to slap.',
         mutator: new UserMutator()
       }
     )
@@ -32,9 +30,9 @@ export default class SlapCommand extends FormalCommand {
 
   public name = 'slap';
 
-  public respond(context: Context, slapper: User, slappee?: User) {
-    if (slappee !== undefined) {
-      context.channel.send(`_${slapper} slaps ${slappee} with a wet trout!_`);
+  public respond(context: Context, slapper: User, ...slappees: User[]) {
+    if (slappees.length > 0) {
+      context.channel.send(`_${slapper} slaps ${slappees.join(' and ')} with a wet trout!_`);
     } else {
       context.channel.send(`_slaps ${slapper} with a wet trout!_`);
     }
