@@ -6,13 +6,17 @@ export function enable(on: ExtensionBootstrapper) {
     const router = new Router(client);
 
     on('extensionsWereReloaded', router.reload.bind(router));
-
-    on('message', (message: Message) => {
-      if (message.author.id === client.user.id) {
-        return;
-      }
-
-      router.route(message);
-    });
+    on('message', router.route.bind(router));
   });
 }
+
+// Library exports
+export { default as Registry } from './route/Registry'
+export { default as Request } from './route/Request'
+export { default as Router } from './route/Router'
+export { default as Signal } from './route/Signal'
+export { default as Command } from './command/Command'
+export { default as FormalCommand } from './command/FormalCommand'
+export { default as ICommand } from './command/ICommand'
+export { default as RegexCommand } from './command/RegexCommand'
+export { default as IMutator } from './command/formality/IMutator'

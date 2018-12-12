@@ -2,8 +2,10 @@
   "private": true,
   "name": "boy-howdy-ext-commands",
   "dependencies": {
-    "boy-howdy-core": "file:../core/",
     "string-argv": "0.0.2"
+  },
+  "peerDependencies": {
+    "boy-howdy-core": "0.1.0-alpha"
   },
   "devDependencies": {
     "@types/node": "^9.6.2",

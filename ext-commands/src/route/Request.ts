@@ -1,6 +1,7 @@
-import { Message } from 'boy-howdy-core'
+import { Client, Message } from 'boy-howdy-core'
 import * as argv from 'string-argv'
 import Signal from './Signal'
+import Context from './Context'
 
 /**
  * Every message the client receives is interpreted as a `Request`. The
@@ -13,6 +14,7 @@ export default class Request {
   private _content: string;
   private _name: string;
   private _arguments: string[];
+  private _context: Context;
 
   /**
    * Whether the request has been handled or not. A request being
@@ -74,6 +76,23 @@ export default class Request {
     const args: string[] = argv(this.content);
 
     return this._arguments = args;
+  }
+
+  /**
+   * The context for the request. This should generally only be used
+   * when a `Context` instance is needed; otherwise, you can use the
+   * request's `originalMessage` to get all the same information.
+   */
+  public get context() {
+    if (this._context !== undefined) {
+      return this._context;
+    }
+
+    return this._context = new Context(
+      this.originalMessage.client as Client,
+      this.originalMessage.channel,
+      this.originalMessage.author
+    );
   }
 
   constructor(message: Message, availableSignals: Signal[]) {

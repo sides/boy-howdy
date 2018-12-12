@@ -1,9 +1,12 @@
 import { User, TextChannel, GroupDMChannel } from 'boy-howdy-core'
-import FormalCommandContext from '../FormalCommandContext'
+import Context from '../../route/Context'
 import IMutator from './IMutator'
 
 export default class UserMutator implements IMutator<User> {
-  public async mutate(context: FormalCommandContext, arg: string) {
+  /**
+   * @inheritdoc
+   */
+  public async mutate(context: Context, arg: string) {
     const mentionMatch = arg.match(/<@!?([0-9]+)>/);
 
     // If it's a mention, this is pretty straightforward.
@@ -36,6 +39,6 @@ export default class UserMutator implements IMutator<User> {
       }
     }
 
-    return Promise.reject(undefined);
+    return Promise.reject(`${arg} is not a user`);
   }
 }

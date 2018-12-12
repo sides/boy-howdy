@@ -1,9 +1,9 @@
-import * as pathUtil from 'path'
+import { resolve as resolvePath } from 'path'
 import Client from '../bot/Client'
 import Extension from './Extension'
 import Storage from '../storage/ISqlStorage'
 import ExtensionRepository from './ExtensionRepository'
-import { getInstalledPackages } from '../util/npm'
+import { getExtensionPackages } from '../util/npm'
 
 export default class ExtensionManager {
   private _extensions: Extension[];
@@ -118,11 +118,11 @@ export default class ExtensionManager {
   }
 
   private getLoadedExtensions() {
-    return getInstalledPackages().then(this.sortExtensionPackages);
+    return getExtensionPackages().then(this.sortExtensionPackages);
   }
 
-  private sortExtensionPackages(packages: Object) {
-    return Object.values(packages)
+  private sortExtensionPackages(packages: Object[]) {
+    return packages
       .filter(ExtensionManager.isValidExtensionPackage)
       .map(ExtensionManager.extensionFromPackage);
   }
@@ -141,12 +141,12 @@ export default class ExtensionManager {
     const version = pack.version || '0.0.0';
     const path = pack.path;
     const main = pack.main ? pack.main : './index.js';
-    const modulePath = pathUtil.join(path, main);
+    const modulePath = resolvePath(path, main);
 
     let migrationsPath = null;
 
     if (pack['boy-howdy-extension']['migrations']) {
-      migrationsPath = pathUtil.join(path, pack['boy-howdy-extension']['migrations']);
+      migrationsPath = resolvePath(path, pack['boy-howdy-extension']['migrations']);
     }
 
     return new Extension(id, name, version, path, modulePath, migrationsPath);

@@ -1,6 +1,6 @@
 Boy Howdy is in an alpha stage and shouldn't be used for any purpose, probably not when it's released either.
 
-## About
+## Summary
 
 This repository contains many different packages that together form Boy Howdy, an extensible Discord bot.
 
@@ -16,4 +16,4 @@ $ not yet
 
 The core is written in [TypeScript](https://github.com/Microsoft/TypeScript).
 
-It still uses some local packages so I'm not sure how well it works on another machine.
+Not every package is on npm so you have to mess around with `npm link` a bit to get it to work.

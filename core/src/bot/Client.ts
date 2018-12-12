@@ -63,10 +63,9 @@ export default class Client extends BaseClient {
     /**
      * Bootstraps the client. Runs after the bot successfully logs in.
      */
-    protected bootstrap() {
-      Promise.all([
-        this.extensions.reload()
-      ]).then(() => this.emit('readyAndBootstrapped', this))
-        .catch(err => { throw err; });
+    protected async bootstrap() {
+      await this.extensions.reload();
+
+      this.emit('readyAndBootstrapped', this);
     }
 }

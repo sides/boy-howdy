@@ -1,44 +1,81 @@
-import { Client } from 'boy-howdy-core'
 import ICommand from './ICommand'
-import FormalCommandContext from './FormalCommandContext'
 import Request from '../route/Request'
-import IMutator from './mutate/IMutator'
+import Context from '../route/Context'
+import Signature from './formality/Signature'
+import SignatureError  from './formality/SignatureError'
 
 export default abstract class FormalCommand implements ICommand {
-  protected _signatures: IMutator<any>[] = [];
+  protected _signatures: Signature[] = [];
 
+  /**
+   * The name of the command.
+   */
   public abstract name: string;
 
-  public abstract respond(context: FormalCommandContext, ...args: any[]): void;
+  /**
+   * Responds to the command being used.
+   */
+  public abstract respond(context: Context, ...args: any[]): void;
 
-  protected async mutateArgs(context: FormalCommandContext, rawArgs: string[]) {
-    if (this._signatures.length === 0) {
-      return rawArgs;
-    }
-
-    let args = [];
-
-    for (let i = 0; i < rawArgs.length; i++) {
-      if (this._signatures[i]) {
-        args.push(await this._signatures[i].mutate(context, rawArgs[i]));
+  /**
+   * @inheritdoc
+   */
+  public async handle(request: Request) {
+    try {
+      this.respond(request.context, ...await this.processArguments(request.context, request.arguments.slice(1)));
+    } catch (err) {
+      if (err instanceof SignatureError) {
+        request.context.reply(this.helpError(err));
       } else {
-        args.push(rawArgs[i]);
+        throw err;
       }
     }
 
-    return args;
+    request.handled = true;
   }
 
-  public async handle(request: Request) {
-    const context = new FormalCommandContext(
-      request.originalMessage.client as Client,
-      request.originalMessage.channel,
-      request.originalMessage.author,
-      request.content
-    );
+  /**
+   * Prints usage help for an error.
+   *
+   * @param err An error that help is needed with.
+   */
+  public helpError(err?: SignatureError) {
+    const msg = [`❗ ${err.message}`];
 
-    this.respond(context, ...await this.mutateArgs(context, request.arguments.slice(1)));
+    msg.push('```');
+    msg.push(`${this.name} ${err}`);
+    msg.push('```');
 
-    request.handled = true;
+    return msg.join('\n');
+  }
+
+  /**
+   * @todo Actually process signatures async? It would force signatures
+   *       to be unique instead of being able to rely on their order.
+   *       However it may actually be less performant as the first
+   *       signature can be the most commonly used one, so less time is
+   *       spent processing rarely used signatures.
+   */
+  protected async processArguments(context: Context, rawArgs: string[]) {
+    let bestError: SignatureError;
+
+    for (let i = 0; i < this._signatures.length; i++) {
+      try {
+        return await this._signatures[i].process(context, rawArgs);
+      } catch (err) {
+        if (err instanceof SignatureError) {
+          // The more specific the error the better.
+          if (bestError === undefined ||
+            (err.index !== undefined && bestError.index === undefined)
+          ) {
+            bestError = err;
+          }
+        } else {
+          throw err;
+        }
+      }
+    }
+
+    throw bestError;
   }
 }

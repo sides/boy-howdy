@@ -2,9 +2,8 @@
   "private": true,
   "name": "boy-howdy",
   "dependencies": {
-    "boy-howdy-ext-commands": "file:../ext-commands/",
-    "boy-howdy-ext-dndebug": "file:../ext-dndebug/",
-    "boy-howdy-core": "file:../core/",
+    "boy-howdy-core": "0.1.0-alpha",
+    "boy-howdy-ext-commands": "0.1.0-alpha",
     "bufferutil": "^3.0.5"
   },
   "scripts": {

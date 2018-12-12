@@ -11,6 +11,9 @@ export default abstract class RegexCommand implements ICommand {
     return true;
   }
 
+  /**
+   * @inheritdoc
+   */
   public handle(request: Request) {
     if (!this.quickMatch(request.originalMessage)) {
       return;

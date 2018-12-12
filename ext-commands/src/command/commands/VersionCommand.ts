@@ -1,5 +1,5 @@
 import FormalCommand from '../FormalCommand'
-import FormalCommandContext from '../FormalCommandContext'
+import FormalCommandContext from '../../route/Context'
 
 export default class VersionCommand extends FormalCommand {
   public name = 'version';

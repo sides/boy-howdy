@@ -1,15 +1,32 @@
-import { exec } from 'child_process'
+import { readdir, stat } from 'fs'
+import { join, dirname } from 'path'
 
-export function getInstalledPackages() {
-  return new Promise<any>((resolve, reject) => {
-    exec('npm ls --depth=0 --json --long --prod', (error, stdout, stderr) => {
-      if (error) {
-        throw error;
-      }
+/**
+ * Get packages in the main module's `node_modules` whose names start
+ * with `boy-howdy-ext-`.
+ */
+export function getExtensionPackages() {
+  return new Promise<any[]>((resolve, reject) => {
+    readdir('node_modules', (err, files) => {
+      if (err) throw err;
 
-      const json = JSON.parse(stdout);
+      Promise.all(
+        files
+          .filter(file => file.startsWith('boy-howdy-ext-'))
+          .map(file => new Promise((statResolve, statReject) => {
+            stat(join('node_modules', file), (err, stats) => {
+              if (err) throw err;
 
-      resolve(json.dependencies);
+              if (stats.isDirectory()) {
+                const pack = require.main.require(join(file, 'package.json'));
+
+                pack.path = join(dirname(require.main.filename), 'node_modules', file);
+
+                statResolve(pack);
+              }
+            });
+          }))
+      ).then(resolve);
     });
   });
 }

@@ -46,6 +46,10 @@ export default class Router {
   }
 
   public route(message: Message) {
+    if (message.author.id === this._client.user.id) {
+      return;
+    }
+
     const request = new Request(message, this.signals);
 
     // Begin by going over generic commands that could be anything.
